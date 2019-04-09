@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <math.h>
 
 #include "csv_reader.hpp"
 #include "data_item.hpp"

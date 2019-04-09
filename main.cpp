@@ -8,14 +8,20 @@ int main(){
     vector<Centroid> centroids;
     string csv_filename="prova.csv";
     
-    srand(time(NULL));
-    csv_reader.readCsv(csv_filename, &dataset); //create the dataset from the csv
     
-    for(int i=0; i<NUM_CENTROIDS;i++){      //initialize centroids at random
+    /*Create the dataset from CSV files*/
+    csv_reader.readCsv(csv_filename, &dataset); 
+    
+    /*Initialize centroids at random*/
+    srand(time(NULL));
+    for(int i=0; i<NUM_CENTROIDS;i++){      
         centroids.push_back(Centroid());
         centroids.at(i).randomInit();
     }
 
+    for(int i=0;i<dataset.size();i++){
+        dataset.at(i).findNearestCentroid(&centroids);
+    }
     
 
     return 0;

@@ -25,12 +25,12 @@ void CSVReader::readCsv(string filename, vector<DataItem> *dataset){
             }
             line_index++;
         }
-        for(int i =0;i< dataset->size();i++){
+        /*for(int i =0;i< dataset->size();i++){
             for (int j=0;j< NUM_VARIABLES;j++){
                 cout<<dataset->at(i).getVariable(j)<<" ";
             }
             cout<<endl;
-        }
+        }*/
 
         fin.close();
     }else{
