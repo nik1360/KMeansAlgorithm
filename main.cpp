@@ -1,35 +1,22 @@
-#include "constants.hpp"
-
+#include "lib_const.hpp"
 
 using namespace std;
 
 int main(){
-
+    CSVReader csv_reader;
     vector<DataItem> dataset;
-    int line_index=0,var_index;
-    double val;
-
-    fstream fin;
-    string entry,line,filename="prova.csv";
-    fin.open(filename);
+    vector<Centroid> centroids;
+    string csv_filename="prova.csv";
     
-    line_index=0;
-    while(getline(fin, line)){  //reading a line of the CSV
-        if(line_index>0){    //the first line does not contain values
-            istringstream s(line);
-            dataset.push_back(DataItem()); //create a new DataItem in the dataset 
-            
-            var_index=0;
-            while(getline(s,entry,';'))
-            {
-                istringstream ss(entry);
-                ss >> val;
-                dataset.at(line_index-1).setVariable(var_index,val);    //insert values of the variables in the DataItem
-                var_index++;
-            }
-        }
-        line_index++;
+    srand(time(NULL));
+    csv_reader.readCsv(csv_filename, &dataset); //create the dataset from the csv
+    
+    for(int i=0; i<NUM_CENTROIDS;i++){      //initialize centroids at random
+        centroids.push_back(Centroid());
+        centroids.at(i).randomInit();
     }
+
+    
 
     return 0;
 }
