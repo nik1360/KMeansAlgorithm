@@ -23,6 +23,7 @@ int main(){
         dataset.at(i).findNearestCentroid(&centroids);
     }
     
+    cout<<dataset.size()<<endl;
 
     return 0;
 }

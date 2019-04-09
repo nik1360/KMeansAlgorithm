@@ -4,6 +4,11 @@
 DataItem::DataItem(){
     variables=(double*)malloc(NUM_VARIABLES*sizeof(double));
 }
+
+void DataItem::deallocateVariables(){
+    free(variables);
+}
+
 void DataItem::findNearestCentroid(vector<Centroid> *centroids){
     double squared_distances[NUM_CENTROIDS],diff;
     
@@ -28,7 +33,5 @@ void DataItem::findNearestCentroid(vector<Centroid> *centroids){
     }
     /*Update*/
     nearestDistance=sqrt(nearestDistance);
-    //nearestCentroid=centroids->at(nearestIndex);
-    cout<<nearestIndex<<endl;
 }
 
