@@ -1,8 +1,11 @@
 #include "lib_const.hpp"
 
+using namespace std;
+
 Centroid::Centroid(){
     associatedData=0;
     variables=(double*)malloc(NUM_VARIABLES*sizeof(double));
+    displacements=(double*)malloc(NUM_VARIABLES*sizeof(double));
 }
 
 void Centroid::randomInit(){
@@ -11,8 +14,9 @@ void Centroid::randomInit(){
     }
 }
 
-void Centroid::deallocateVariables(){
+void Centroid::deallocate(){
     free(variables);
+    free(displacements);
 }
 
 void Centroid::optimizePosition(int centroid_index, vector<DataItem> *dataset){
@@ -38,9 +42,27 @@ void Centroid::optimizePosition(int centroid_index, vector<DataItem> *dataset){
     /*Update the values of the variables*/
     if(associatedData>0){
         for(int i=0;i<NUM_VARIABLES;i++){
-            variables[i]=new_variables[i]/associatedData;
+            displacements[i]=(new_variables[i]/associatedData)-variables[i]; //compute the difference between the new and the old variables
+            variables[i]=variables[i]+displacements[i];
         }
     }
     
     free(new_variables);
+}
+
+bool Centroid::checkDisplacements(){
+    int converged_count;
+    double threshold;
+
+    threshold=0.000001;
+    converged_count=0;
+    for(int i=0;i<NUM_VARIABLES;i++){
+        if(fabs(displacements[i])<threshold){
+            converged_count++;
+        }
+    }
+    if(converged_count==NUM_VARIABLES)
+        return true;
+    else
+        return false;
 }

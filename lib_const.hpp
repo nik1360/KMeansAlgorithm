@@ -16,3 +16,4 @@
 
 #define NUM_VARIABLES 3
 #define NUM_CENTROIDS 10
+#define MAX_ITERATIONS 100

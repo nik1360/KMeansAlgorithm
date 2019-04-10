@@ -1,11 +1,10 @@
-
 #include "lib_const.hpp"
 
 DataItem::DataItem(){
     variables=(double*)malloc(NUM_VARIABLES*sizeof(double));
 }
 
-void DataItem::deallocateVariables(){
+void DataItem::deallocate(){
     free(variables);
 }
 
@@ -33,5 +32,6 @@ void DataItem::findNearestCentroid(vector<Centroid> *centroids){
     }
     /*Update*/
     nearestDistance=sqrt(nearestDistance);
+    
 }
 

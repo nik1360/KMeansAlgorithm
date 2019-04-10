@@ -12,10 +12,9 @@ class DataItem{
         double nearestIndex;    //index of the nearest centroid
     public:
         DataItem();
-        void deallocateVariables();
+        void deallocate();
         double getVariable(int index){return variables[index];};
         void setVariable(int index, double value){variables[index]=value;};
         void findNearestCentroid(vector<Centroid> *centroids);
         int getNearestIndex(){return nearestIndex;};
-       
 };
