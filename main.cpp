@@ -10,61 +10,52 @@ int main(){
     //string csv_filename="prova.csv";
 
     bool convergence;
-    int it_count;
+    int it_count,conv_count;
     time_t start_search, stop_search, start_opt, stop_opt;
-    double t_search, t_opt;    
+    double t_search, t_opt, threshold=0.00001;    
     
     /*Create the dataset from CSV files*/
     csv_reader.readCsv(csv_filename, dataset); 
-    for(int data_index=0;data_index<dataset.size();data_index++){
-            
-        for(int i=0;i<NUM_VARIABLES;i++){
-            cout<<dataset.at(data_index).getVariable(i)<<" ";
-        }
-        cout<<endl;
-    }
     
     cout<<dataset.size()<<endl;
+
     /*Initialize centroids at random*/
     srand(time(NULL));
     for(int i=0; i<NUM_CENTROIDS;i++){      
         centroids.push_back(Centroid());
-        centroids.at(i).randomInit();
     }
 
     convergence=false;
     it_count=0;
+    
     while((convergence==false)&&(it_count<MAX_ITERATIONS)){
         it_count++;
         convergence=true;
+        conv_count=0;
         
         start_search=clock();
-        /*For every element of the dataset, find the centroid*/
+        //For every element of the dataset, find the centroid
         for(int data_index=0;data_index<dataset.size();data_index++){
-            dataset.at(data_index).findNearestCentroid(&centroids);
+            dataset[data_index].findNearestCentroid(centroids);
         }
         stop_search=clock();
         t_search=(double)(stop_search-start_search)/CLOCKS_PER_SEC;
-
         start_opt=clock();
-        /*Optimize the position of the centroids*/
+        //Optimize the position of the centroids
         for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
-            centroids.at(centr_index).optimizePosition(centr_index,&dataset);
-            /*cout<<"CENTROID: "<<centr_index<<"-> ";
-            for(int i=0;i<NUM_VARIABLES;i++){
-                cout<<centroids.at(centr_index).getDisplacement(i)<<" ";
-            }
-            cout<<endl;
-            */
+            centroids[centr_index].optimizePosition(centr_index,dataset);
         }
         stop_opt=clock();
         t_opt=(double)(stop_opt-start_opt)/CLOCKS_PER_SEC;
-        /*Check if there is convergence*/
+        //Check the displacements
         for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
-            if(centroids.at(centr_index).checkDisplacements()==false){  
-                convergence=false;  
-                break;
+            if(fabs(centroids[centr_index].getDisplacement())<threshold){  
+               conv_count++;  
             }
+        }
+        //if all the centroids has zero displacement, there is convergence
+        if(conv_count < NUM_CENTROIDS){
+            convergence=false;
         }
         cout<<"it: "<<it_count<<" -> t_search: "<<t_search<<"   t_opt:"<<t_opt<<endl;
     }
@@ -73,13 +64,5 @@ int main(){
     else
         cout<<"MAX NUMBER OF ITERATIONS ("<<MAX_ITERATIONS<<") reached!"<<endl;
     
-    /*Deallocate the arrays inside the data items and the centroids*/
-    for(int data_index=0;data_index<dataset.size();data_index++){
-        dataset.at(data_index).deallocate();
-    }
-    for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
-        centroids.at(centr_index).deallocate();
-    }
-
     return 0;
 }

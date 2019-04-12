@@ -1,27 +1,24 @@
 #include "lib_const.hpp"
 
 void CSVReader::readCsv(string filename, vector<DataItem> &dataset){
-    int line_index=0,var_index;
+    int line_index;
     double val;
-    string line,feature;
+    string line,entry;
     ifstream in(filename);
+    vector<double> tmp;
     
     line_index=0;
     if(!in.fail()){
         while(getline(in,line)){
-        
             if(line_index>0){
-                dataset.push_back(DataItem());
-                istringstream features(line);
-                var_index=0;
-                while(getline(features,feature,',')){
-                    istringstream f(feature);
-                    f>>val;
-                    
-                    dataset[line_index-1].setVariable(var_index,val);
-                    var_index++;
-                    
+                istringstream entries(line);
+                while(getline(entries,entry,',')){
+                    istringstream s(entry);
+                    s>>val;
+                    tmp.push_back(val);
                 }
+                dataset.push_back(DataItem(tmp));
+                tmp.clear();
             }
             line_index++;
         }

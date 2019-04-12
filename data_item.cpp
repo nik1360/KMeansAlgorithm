@@ -1,21 +1,17 @@
 #include "lib_const.hpp"
 
-DataItem::DataItem(){
-    variables=(double*)malloc(NUM_VARIABLES*sizeof(double));
+DataItem::DataItem(vector<double> var){
+    variables=var;    
 }
 
-void DataItem::deallocate(){
-    free(variables);
-}
-
-void DataItem::findNearestCentroid(vector<Centroid> *centroids){
+void DataItem::findNearestCentroid(vector<Centroid> &centroids){
     double squared_distances[NUM_CENTROIDS],diff;
     
     /*Compute the squared distances from the centroids*/
     for(int i=0;i<NUM_CENTROIDS;i++){   
         squared_distances[i]=0;
         for(int j=0;j<NUM_VARIABLES;j++){
-            diff=getVariable(j)-centroids->at(i).getVariable(j);    
+            diff=getVariables()[j]-centroids[i].getVariables()[j];    
             diff=diff*diff;
 
             squared_distances[i]+=diff;
