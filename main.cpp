@@ -15,7 +15,7 @@ int main(){
     double t_search, t_opt;    
     
     /*Create the dataset from CSV files*/
-    csv_reader.readCsv(csv_filename, &dataset); 
+    csv_reader.readCsv(csv_filename, dataset); 
     for(int data_index=0;data_index<dataset.size();data_index++){
             
         for(int i=0;i<NUM_VARIABLES;i++){
@@ -42,10 +42,6 @@ int main(){
         /*For every element of the dataset, find the centroid*/
         for(int data_index=0;data_index<dataset.size();data_index++){
             dataset.at(data_index).findNearestCentroid(&centroids);
-            for(int i=0;i<NUM_VARIABLES;i++){
-                cout<<dataset.at(data_index).getVariable(i)<<" ";
-            }
-            cout<<endl;
         }
         stop_search=clock();
         t_search=(double)(stop_search-start_search)/CLOCKS_PER_SEC;
@@ -54,20 +50,17 @@ int main(){
         /*Optimize the position of the centroids*/
         for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
             centroids.at(centr_index).optimizePosition(centr_index,&dataset);
-            if(centroids.at(centr_index).checkDisplacements()==false){  //check the displacement of the entroid
-                convergence=false;  //if the displacement of a single centroid is > 0, then there is no convergence
-            }
-        }
-        stop_opt=clock();
-        t_opt=(double)(stop_opt-start_opt)/CLOCKS_PER_SEC;
-        /*Check if there is convergence*/
-        for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
             /*cout<<"CENTROID: "<<centr_index<<"-> ";
             for(int i=0;i<NUM_VARIABLES;i++){
                 cout<<centroids.at(centr_index).getDisplacement(i)<<" ";
             }
             cout<<endl;
             */
+        }
+        stop_opt=clock();
+        t_opt=(double)(stop_opt-start_opt)/CLOCKS_PER_SEC;
+        /*Check if there is convergence*/
+        for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
             if(centroids.at(centr_index).checkDisplacements()==false){  
                 convergence=false;  
                 break;
