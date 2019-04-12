@@ -3,38 +3,29 @@
 void CSVReader::readCsv(string filename, vector<DataItem> *dataset){
     int line_index=0,var_index;
     double val;
-
-    string entry,line;
-    fin.open(filename);
+    string line,feature;
+    ifstream in(filename);
     
-    if(!fin.fail()){
-        line_index=0;
-        while(getline(fin, line)){  //reading a line of the CSV
-            if(line_index>0){    //the first line does not contain values
-                istringstream s(line);
-                dataset->push_back(DataItem()); //create a new DataItem in the dataset 
-                
+    line_index=0;
+    if(!in.fail()){
+        while(getline(in,line)){
+        
+            if(line_index>0){
+                dataset->push_back(DataItem());
+                istringstream features(line);
                 var_index=0;
-                while(getline(s,entry,';'))
-                {
-                    istringstream ss(entry);
-                    ss >> val;
-                    dataset->at(line_index-1).setVariable(var_index,val);    //insert values of the variables in the DataItem
+                while(getline(features,feature,',')){
+                    istringstream f(feature);
+                    f>>val;
+                    dataset->at(line_index-1).setVariable(var_index,val);
+                    cout<<dataset->at(line_index-1).getVariable(var_index)<<" ";
                     var_index++;
                 }
+                cout<<endl;
             }
             line_index++;
         }
-        /*for(int i =0;i< dataset->size();i++){
-            for (int j=0;j< NUM_VARIABLES;j++){
-                cout<<dataset->at(i).getVariable(j)<<" ";
-            }
-            cout<<endl;
-        }*/
-
-        fin.close();
     }else{
         cout<<"ERROR:Cannot open "<<filename<<"!"<<endl;
-    }
-    
+    }    
 }

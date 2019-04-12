@@ -10,7 +10,7 @@ Centroid::Centroid(){
 
 void Centroid::randomInit(){
     for(int j=0; j<NUM_VARIABLES;j++){
-        setVariable(j,rand()%RAND_MAX);
+        setVariable(j,rand()%MAX_RANDOM);
     }
 }
 
