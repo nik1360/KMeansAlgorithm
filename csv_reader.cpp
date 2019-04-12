@@ -18,10 +18,8 @@ void CSVReader::readCsv(string filename, vector<DataItem> *dataset){
                     istringstream f(feature);
                     f>>val;
                     dataset->at(line_index-1).setVariable(var_index,val);
-                    cout<<dataset->at(line_index-1).getVariable(var_index)<<" ";
                     var_index++;
                 }
-                cout<<endl;
             }
             line_index++;
         }

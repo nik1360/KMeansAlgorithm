@@ -14,6 +14,6 @@
 #include "data_item.hpp"
 #include "centroid.hpp"
 
-#define NUM_VARIABLES 3
-#define NUM_CENTROIDS 10
-#define MAX_ITERATIONS 100
+#define NUM_VARIABLES 115
+#define NUM_CENTROIDS 3
+#define MAX_ITERATIONS 1000

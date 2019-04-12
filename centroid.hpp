@@ -20,4 +20,5 @@ class Centroid{
         void randomInit();
         void optimizePosition(int centroid_index,vector<DataItem> *dataset);
         bool checkDisplacements();
+        double getDisplacement(int index){return displacements[index];};
 };

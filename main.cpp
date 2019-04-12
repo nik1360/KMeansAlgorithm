@@ -16,13 +16,13 @@ int main(){
     
     /*Create the dataset from CSV files*/
     csv_reader.readCsv(csv_filename, &dataset); 
-    /*for(int data_index=0;data_index<dataset.size();data_index++){
+    for(int data_index=0;data_index<dataset.size();data_index++){
             
         for(int i=0;i<NUM_VARIABLES;i++){
             cout<<dataset.at(data_index).getVariable(i)<<" ";
         }
         cout<<endl;
-    }*/
+    }
     
     cout<<dataset.size()<<endl;
     /*Initialize centroids at random*/
