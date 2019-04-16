@@ -17,18 +17,20 @@ void Centroid::optimizePosition(int centroid_index, vector<DataItem> &dataset){
     
     associatedData=0;
     displacement=0;
+
+    for(int j=0;j<NUM_VARIABLES;j++){
+        new_variables.push_back(0);
+    }
     
     /*Look for the data items associated to the centroid*/
     for(int i=0;i<dataset.size();i++){
         if((dataset[i].getNearestIndex())==(centroid_index)){       
             /*the data is associated to the centroid*/
             associatedData++;
-            tmp_new_variable=0;
             /*sum the variables that are associated to the centroid*/
             for(int j=0;j<NUM_VARIABLES;j++){
-                tmp_new_variable+=dataset[i].getVariables()[j];   
+                new_variables[j]+=dataset[i].getVariables()[j];   
             }
-            new_variables.push_back(tmp_new_variable);
         }
     }
     

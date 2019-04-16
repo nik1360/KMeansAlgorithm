@@ -9,6 +9,7 @@
 #include <vector>
 #include <time.h>
 #include <math.h>
+#include <omp.h>
 
 #include "csv_reader.hpp"
 #include "data_item.hpp"

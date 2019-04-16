@@ -11,14 +11,21 @@ int main(){
 
     bool convergence;
     int it_count,conv_count;
-    time_t start_search, stop_search, start_opt, stop_opt;
-    double t_search, t_opt, threshold=0.00001;    
+    time_t start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
+    double t_search, t_opt, t_read, threshold=0.00001;    
     
     /*Create the dataset from CSV files*/
-    csv_reader.readCsv(csv_filename, dataset); 
-    
-    cout<<dataset.size()<<endl;
 
+    start_read=clock();
+    csv_reader.readCsv(csv_filename, dataset); 
+    stop_read=clock();
+    t_read=(double)(stop_read-start_read)/CLOCKS_PER_SEC;
+    
+    cout <<"dataset size: "<<dataset.size()<<endl;
+    cout <<"data item size: "<<NUM_VARIABLES<<endl;
+    cout<< "number of centroids: "<<NUM_CENTROIDS<<endl;
+    cout<<"t_read: "<<t_read<<" s"<<endl;
+    
     /*Initialize centroids at random*/
     srand(time(NULL));
     for(int i=0; i<NUM_CENTROIDS;i++){      
@@ -28,6 +35,8 @@ int main(){
     convergence=false;
     it_count=0;
     
+    omp_set_num_threads(omp_get_max_threads());
+
     while((convergence==false)&&(it_count<MAX_ITERATIONS)){
         it_count++;
         convergence=true;
@@ -35,6 +44,7 @@ int main(){
         
         start_search=clock();
         //For every element of the dataset, find the centroid
+        #pragma omp parallel for
         for(int data_index=0;data_index<dataset.size();data_index++){
             dataset[data_index].findNearestCentroid(centroids);
         }
