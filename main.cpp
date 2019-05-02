@@ -6,13 +6,15 @@ int main(){
     CSVReader csv_reader;
     vector<DataItem> dataset;
     vector<Centroid> centroids;
-    string csv_filename="dataset_babymonitor_iot/gafgyt/scan.csv";
-    //string csv_filename="prova.csv";
+    string csv_filename="dataset_babymonitor_iot/gafgyt/scan.csv";  //uses ',' as parameter separator
+    //string csv_filename="prova.csv";  //uses ';' as parameter separator
 
     bool convergence;
     int it_count,conv_count;
     time_t start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
-    double t_search, t_opt, t_read, threshold=0.00001;    
+    double t_search, t_opt, t_read, threshold=0.00000001;    
+
+    omp_set_num_threads(8);
     
     /*Create the dataset from CSV files*/
 
@@ -27,16 +29,15 @@ int main(){
     cout<<"t_read: "<<t_read<<" s"<<endl;
     
     /*Initialize centroids at random*/
-    srand(time(NULL));
-    for(int i=0; i<NUM_CENTROIDS;i++){      
+    
+    for(int i=0; i<NUM_CENTROIDS;i++){  
+        srand(i);    
         centroids.push_back(Centroid());
     }
-
+    
     convergence=false;
     it_count=0;
     
-    omp_set_num_threads(omp_get_max_threads());
-
     while((convergence==false)&&(it_count<MAX_ITERATIONS)){
         it_count++;
         convergence=true;
@@ -55,6 +56,7 @@ int main(){
         for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
             centroids[centr_index].optimizePosition(centr_index,dataset);
         }
+        cout<<endl;
         stop_opt=clock();
         t_opt=(double)(stop_opt-start_opt)/CLOCKS_PER_SEC;
         //Check the displacements
