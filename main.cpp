@@ -11,17 +11,17 @@ int main(){
 
     bool convergence;
     int it_count,conv_count;
-    time_t start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
+    double start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
     double t_search, t_opt, t_read, threshold=0.00000001;    
 
     omp_set_num_threads(4);
     
     /*Create the dataset from CSV files*/
 
-    start_read=clock();
+    start_read=omp_get_wtime();
     csv_reader.readCsv(csv_filename, dataset); 
-    stop_read=clock();
-    t_read=(double)(stop_read-start_read)/CLOCKS_PER_SEC;
+    stop_read=omp_get_wtime();
+    t_read=stop_read-start_read;
     
     cout <<"dataset size: "<<dataset.size()<<endl;
     cout <<"data item size: "<<NUM_VARIABLES<<endl;
@@ -43,22 +43,22 @@ int main(){
         convergence=true;
         conv_count=0;
         
-        start_search=clock();
+        start_search=omp_get_wtime();
         //For every element of the dataset, find the centroid
         #pragma omp parallel for
         for(int data_index=0;data_index<dataset.size();data_index++){
             dataset[data_index].findNearestCentroid(centroids);
         }
-        stop_search=clock();
-        t_search=(double)(stop_search-start_search)/CLOCKS_PER_SEC;
-        start_opt=clock();
+        stop_search=omp_get_wtime();
+        t_search=stop_search-start_search;
+        start_opt=omp_get_wtime();
         //Optimize the position of the centroids
         for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
             centroids[centr_index].optimizePosition(centr_index,dataset);
         }
         cout<<endl;
-        stop_opt=clock();
-        t_opt=(double)(stop_opt-start_opt)/CLOCKS_PER_SEC;
+        stop_opt=omp_get_wtime();
+        t_opt=stop_opt-start_opt;
         //Check the displacements
         for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
             if(fabs(centroids[centr_index].getDisplacement())<threshold){  
