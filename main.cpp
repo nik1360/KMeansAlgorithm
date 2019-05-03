@@ -14,7 +14,7 @@ int main(){
     time_t start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
     double t_search, t_opt, t_read, threshold=0.00000001;    
 
-    omp_set_num_threads(8);
+    omp_set_num_threads(4);
     
     /*Create the dataset from CSV files*/
 
