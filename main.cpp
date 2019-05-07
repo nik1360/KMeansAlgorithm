@@ -14,6 +14,7 @@ int main(){
     double start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
     double t_search, t_opt, t_read, threshold=0.00000001;    
 
+    
     omp_set_num_threads(4);
     
     /*Create the dataset from CSV files*/
@@ -29,10 +30,14 @@ int main(){
     cout<<"t_read: "<<t_read<<" s"<<endl;
     
     /*Initialize centroids at random*/
-    
+    cout<<"INITIAL CENTROIDS"<<endl;
     for(int i=0; i<NUM_CENTROIDS;i++){  
         srand(i);    
         centroids.push_back(Centroid());
+        for(int j=0;j<NUM_VARIABLES;j++){
+            cout<<centroids[i].getVariables()[j]<<" ";
+        }
+        cout<<endl;
     }
     
     convergence=false;
