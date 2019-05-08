@@ -14,7 +14,6 @@ int main(){
     double start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
     double t_search, t_opt, t_read, threshold=0.00000001;    
 
-    
     omp_set_num_threads(4);
     
     /*Create the dataset from CSV files*/
@@ -24,20 +23,15 @@ int main(){
     stop_read=omp_get_wtime();
     t_read=stop_read-start_read;
     
-    cout <<"dataset size: "<<dataset.size()<<endl;
-    cout <<"data item size: "<<NUM_VARIABLES<<endl;
-    cout<< "number of centroids: "<<NUM_CENTROIDS<<endl;
-    cout<<"t_read: "<<t_read<<" s"<<endl;
+    cout <<"DATASET SIZE "<<dataset.size()<<endl;
+    cout <<"NUMBER OF VARIABLES: "<<NUM_VARIABLES<<endl;
+    cout<< "NUMBER OF CENTROIDS: "<<NUM_CENTROIDS<<endl;
+    cout<<"TIME TO READ THE DATABASE: "<<t_read<<" s"<<endl;
     
     /*Initialize centroids at random*/
-    cout<<"INITIAL CENTROIDS"<<endl;
     for(int i=0; i<NUM_CENTROIDS;i++){  
         srand(i);    
         centroids.push_back(Centroid());
-        for(int j=0;j<NUM_VARIABLES;j++){
-            cout<<centroids[i].getVariables()[j]<<" ";
-        }
-        cout<<endl;
     }
     
     convergence=false;
@@ -61,7 +55,6 @@ int main(){
         for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
             centroids[centr_index].optimizePosition(centr_index,dataset);
         }
-        cout<<endl;
         stop_opt=omp_get_wtime();
         t_opt=stop_opt-start_opt;
         //Check the displacements
@@ -74,12 +67,18 @@ int main(){
         if(conv_count < NUM_CENTROIDS){
             convergence=false;
         }
-        cout<<"it: "<<it_count<<" -> t_search: "<<t_search<<"   t_opt:"<<t_opt<<endl;
+
+        /*Print iterations details*/
+        cout<<"IT: "<<it_count<<" -> T_SEARCH: "<<t_search<<"   T_OPT:"<<t_opt<<endl;
+        for(int centr_index=0;centr_index<NUM_CENTROIDS;centr_index++){
+            cout<<"displ c"<<centr_index<<" -> "<<centroids[centr_index].getDisplacement()<<endl;
+        }
+
     }
     if(it_count<MAX_ITERATIONS)
-        cout<<"Convergence in "<<it_count<<" iterations!"<<endl;
+        cout<<"CONVERGENCE IN "<<it_count<<" ITERATIONS!"<<endl;
     else
-        cout<<"MAX NUMBER OF ITERATIONS ("<<MAX_ITERATIONS<<") reached!"<<endl;
+        cout<<"MAX NUMBER OF ITERATIONS ("<<MAX_ITERATIONS<<") REACHED!"<<endl;
     
     return 0;
 }

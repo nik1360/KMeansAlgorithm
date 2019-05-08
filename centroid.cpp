@@ -13,28 +13,21 @@ Centroid::Centroid(){
 
 void Centroid::optimizePosition(int centroid_index, vector<DataItem> &dataset){
   
+    int public_associated_data;
     double new_variables[NUM_VARIABLES]={0};
     double diff,diff2,tmp_displacement;
-    int public_associated_data;
-    int c_index;
-
-    c_index=centroid_index;
-   
-
-
-
-
-    /*Look for the data items associated to the centroid*/
+    
+    /*Look for the data items associated to the centroid, sum the variables and count the item associated to the centroid*/
     public_associated_data=0;
     #pragma omp parallel shared(centroid_index)
     {   
         double private_new_variables[NUM_VARIABLES]={0};
         int private_associated_data=0, d_index;
 
-        #pragma omp for ordered
+        #pragma omp for schedule (static,1)
         for(int i=0;i<dataset.size();i++){
             d_index=dataset[i].getNearestIndex();
-            if(d_index == c_index){       
+            if(d_index == centroid_index){       
                 /*the data is associated to the centroid*/
                 private_associated_data++;
                 /*sum the variables that are associated to the centroid*/
@@ -55,21 +48,6 @@ void Centroid::optimizePosition(int centroid_index, vector<DataItem> &dataset){
 
     }
 
-    /*
-    #pragma omp parallel for shared(centroid_index) reduction(+:tmp_associated_data) reduction(+:new_variables[:NUM_VARIABLES])
-    for(int i=0;i<dataset.size();i++){
-        if((dataset[i].getNearestIndex())==(centroid_index)){       
-            
-            tmp_associated_data++;
-            
-            double val;
-            for(int j=0;j<NUM_VARIABLES;j++){
-                val=dataset[i].getVariables()[j];
-                new_variables[j]+=val;   
-            }
-        }
-    }
-    */
     associatedData=public_associated_data;
     tmp_displacement=0;
 
@@ -79,11 +57,14 @@ void Centroid::optimizePosition(int centroid_index, vector<DataItem> &dataset){
             new_variables[i]=new_variables[i]/associatedData;   
             /*compute the distance between the old centroid and the new centroid*/
             diff=variables[i] - new_variables[i];
-            diff2=diff*diff;
-
-            if(fabs(diff2)>0.00000000001){
+            
+            /*if the difference is below 0,00001%, it is not considered for the displacement*/
+            /*this is to avoid problems related to the floating point approximations*/
+            if(fabs(diff)>fabs(variables[i]/100000)){
+                diff2=diff*diff;
                 tmp_displacement+=diff2;
             }
+
             /*update the variable of the centroid*/
             variables[i]=new_variables[i];
 
@@ -91,13 +72,10 @@ void Centroid::optimizePosition(int centroid_index, vector<DataItem> &dataset){
 
     }
     
-    displacement=tmp_displacement;
-    
-    /*cout<<"NEW_VARIABLES"<<endl;
-    for(int j=0;j<NUM_VARIABLES;j++){
-        cout<<" "<<new_variables[j];   
-    }*/
-    //cout<<endl;
-    cout<<displacement<<endl;
+    if(fabs(tmp_displacement>0.000000001)){
+        displacement=sqrt(tmp_displacement);
+    }else{
+        displacement=0;
+    }
     
 }
