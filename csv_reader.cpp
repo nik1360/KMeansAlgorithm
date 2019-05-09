@@ -1,6 +1,6 @@
 #include "lib_const.hpp"
 
-void CSVReader::readCsv(string filename, vector<DataItem> &dataset){
+bool CSVReader::readCsv(string filename, vector<DataItem> &dataset){
     int line_index;
     double val;
     string line,entry;
@@ -22,7 +22,9 @@ void CSVReader::readCsv(string filename, vector<DataItem> &dataset){
             }
             line_index++;
         }
+        return true;
     }else{
         cout<<"ERROR:Cannot open "<<filename<<"!"<<endl;
+        return false;
     }    
 }

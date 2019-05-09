@@ -10,5 +10,5 @@ class CSVReader{
     private:
         fstream fin;
     public:
-        void readCsv(string filename, vector<DataItem> &dataset);
+        bool readCsv(string filename, vector<DataItem> &dataset);
 };

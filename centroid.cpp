@@ -57,7 +57,6 @@ void Centroid::optimizePosition(int centroid_index, vector<DataItem> &dataset){
             new_variables[i]=new_variables[i]/associatedData;   
             /*compute the distance between the old centroid and the new centroid*/
             diff=variables[i] - new_variables[i];
-            
             /*if the difference is below 0,00001%, it is not considered for the displacement*/
             /*this is to avoid problems related to the floating point approximations*/
             if(fabs(diff)>fabs(variables[i]/100000)){
@@ -67,9 +66,7 @@ void Centroid::optimizePosition(int centroid_index, vector<DataItem> &dataset){
 
             /*update the variable of the centroid*/
             variables[i]=new_variables[i];
-
         }
-
     }
     
     if(fabs(tmp_displacement>0.000000001)){
