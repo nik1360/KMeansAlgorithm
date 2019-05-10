@@ -6,23 +6,62 @@ int main(){
     CSVReader csv_reader;
     vector<DataItem> dataset;
     vector<Centroid> centroids;
-    string csv_filename="dataset_babymonitor_iot/gafgyt/scan.csv";  //uses ',' as parameter separator
-    //string csv_filename="prova.csv";  //uses ';' as parameter separator
+    string csv_filename;
 
     bool convergence;
     int it_count,conv_count,nthreads;
     double start_search, stop_search, start_opt, stop_opt, start_read, stop_read;
     double t_search, t_opt, t_read, threshold=0.00000001;    
 
-    nthreads=omp_get_max_threads();
+    nthreads=1;
+    //nthreads=omp_get_max_threads();
     omp_set_num_threads(nthreads);
     
     /*Create the dataset from CSV files*/
 
     start_read=omp_get_wtime();
-    if(!csv_reader.readCsv(csv_filename, dataset)){
+
+    csv_filename="dataset_babymonitor_iot/benign_traffic.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
         return 1;
     }
+    csv_filename="dataset_babymonitor_iot/gafgyt/junk.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
+        return 1;
+    }
+    csv_filename="dataset_babymonitor_iot/gafgyt/scan.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
+        return 1;
+    }
+    csv_filename="dataset_babymonitor_iot/gafgyt/tcp.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
+        return 1;
+    }
+    csv_filename="dataset_babymonitor_iot/gafgyt/udp.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
+        return 1;
+    }
+    csv_filename="dataset_babymonitor_iot/mirai/ack.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
+        return 1;
+    }
+    csv_filename="dataset_babymonitor_iot/mirai/scan.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
+        return 1;
+    }
+    csv_filename="dataset_babymonitor_iot/mirai/udpplain.csv";  
+    cout<<"Reading from "<<csv_filename<<endl;
+    if(!csv_reader.readCsv("dataset_babymonitor_iot/gafgyt/scan.csv", dataset)){
+        return 1;
+    }
+
     stop_read=omp_get_wtime();
     t_read=stop_read-start_read;
     
