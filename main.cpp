@@ -70,7 +70,7 @@ int main(int argc, char **argv){
     cout <<"NUMBER OF VARIABLES: "<<NUM_VARIABLES<<endl;
     cout<< "NUMBER OF CENTROIDS: "<<NUM_CENTROIDS<<endl;
     cout<<"TIME TO READ THE DATABASE: "<<t_read<<" s"<<endl;
-    cout<<"NUMBER OF THREADS: "<<nthreads;
+    cout<<"NUMBER OF THREADS: "<<nthreads<<endl;
     
     /*Initialize centroids at random*/
     for(int i=0; i<NUM_CENTROIDS;i++){  
